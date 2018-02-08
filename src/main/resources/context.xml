@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-lazy-init="true" xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c">
+    <import resource="anotationsContext.xml"/>
+    <import resource="logers.xml"/>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:ignoreResourceNotFound="true"
+          p:systemPropertiesMode="2">
+        <property name="locations">
+            <list>
+                <value>classpath:client.properties</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="client1" class="com.epam.spring.sbilorys.Client"
+          c:id="${id}"
+          c:name="${name}"
+          c:greeting="${greeting}">
+    </bean>
+    <bean id="dateFormat" class="java.text.DateFormat" factory-method="getDateInstance"/>
+    <bean id="date" class="java.util.Date"/>
+    <bean id="event" class="com.epam.spring.sbilorys.Event" scope="prototype">
+        <constructor-arg name="date" ref="date"/>
+        <constructor-arg name="dateFormat" type="java.text.DateFormat" ref="dateFormat"/>
+    </bean>
+</beans>

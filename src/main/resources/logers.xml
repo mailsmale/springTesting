@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-lazy-init="true" xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean name="defaultInitDestroyMethods" abstract="true" init-method="initBean"
+          destroy-method="destroyBean" lazy-init="true">
+    </bean>
+
+    <bean id="eventLogger" class="com.epam.spring.sbilorys.loggers.UniversalEventLogger"
+          init-method="initBean">
+        <constructor-arg name="client" ref="client1"/>
+    </bean>
+    <bean id="cachedEventLogger" class="com.epam.spring.sbilorys.loggers.CachedUniversalEventLogger"
+          parent="defaultInitDestroyMethods">
+        <constructor-arg name="client" ref="client1"/>
+    </bean>
+
+    <beans>
+        <bean name="defaultApp" abstract="true" lazy-init="true" scope="prototype">
+            <property name="event_importantcy" value="ERROR"/>
+        </bean>
+        <bean id="app" class="com.epam.spring.sbilorys.App" lazy-init="true" parent="defaultApp">
+            <constructor-arg name="eventLogger" ref="eventLogger"/>
+        </bean>
+        <bean name="cachedApp" id="cachedApp" class="com.epam.spring.sbilorys.App"
+              parent="defaultApp">
+            <constructor-arg name="eventLogger" ref="cachedEventLogger"/>
+        </bean>
+    </beans>
+</beans>
