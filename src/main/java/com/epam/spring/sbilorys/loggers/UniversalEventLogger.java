@@ -6,13 +6,16 @@ import java.util.Optional;
 import com.epam.spring.sbilorys.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class UniversalEventLogger extends EventLogger {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    public UniversalEventLogger(Client client) {
+
+    public UniversalEventLogger(@Autowired Client client) {
         super(client);
+        logger.info("UniversalEventLogger()");
     }
 
     @Override
@@ -29,7 +32,7 @@ public class UniversalEventLogger extends EventLogger {
 
     protected void initBean(){
         File file = new File("log.txt");
-        if (false ==  file.canWrite()){
+        if (!file.canWrite()){
             throw new ExceptionInInitializerError("Can not read file 'log.txt'!");
         }
     }

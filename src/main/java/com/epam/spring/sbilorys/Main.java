@@ -1,6 +1,7 @@
 package com.epam.spring.sbilorys;
 
 import com.epam.spring.sbilorys.autowired.AppAutowired;
+import com.epam.spring.sbilorys.loggers.Key;
 import com.epam.spring.sbilorys.loggers.UniversalEventLogger;
 
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ public class Main {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext applicationContext = new ClassPathXmlApplicationContext("context.xml");
+        Session.<ConfigurableApplicationContext>putToSession(Key.CONTEXT, applicationContext);
         App app = applicationContext.getBean("app", App.class);
         app.tryToLog();
         App cachedApp = applicationContext.getBean("cachedApp", App.class);
@@ -24,6 +26,8 @@ public class Main {
         applicationContext.close();
         AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(
                 AppAutowired.class);
+        App appFromAnotated = annotationConfigApplicationContext.getBean(App.class);
+        appFromAnotated.tryToLog();
 
     }
 }
